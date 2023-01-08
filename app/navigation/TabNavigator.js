@@ -9,13 +9,12 @@ const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
-    <Tab.Navigator >
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
         options={{
           tabBarIcon: (focused, color, size) => {
             return <AntDesign name="home" size={24} color={color} />;
           },
-          headerShown: false
         }}
         name="HomeScreen"
         component={AppNavigator}

@@ -40,3 +40,29 @@ export const getSinglePost = async (slug) => {
     return { err: err.message || err };
   }
 };
+
+export const getSimilarPost = async (id) => {
+  try {
+    const { data } = await client(`/post/related-posts/${id}`);
+    return data;
+  } catch (err) {
+    const { response } = error;
+    if (response?.data) {
+      return response.data;
+    }
+    return { err: err.message || err };
+  }
+};
+
+export const searchPosts = async (query) => {
+  try {
+    const { data } = await client(`/post/search?title=${query}`);
+    return data;
+  } catch (err) {
+    const { response } = error;
+    if (response?.data) {
+      return response.data;
+    }
+    return { err: err.message || err };
+  }
+};

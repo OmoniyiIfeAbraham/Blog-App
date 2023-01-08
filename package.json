@@ -16,6 +16,7 @@
     "dateformat": "^5.0.3",
     "expo": "~47.0.9",
     "expo-constants": "^14.0.2",
+    "expo-linking": "^3.3.0",
     "expo-status-bar": "~1.4.2",
     "punycode": "^2.1.1",
     "react": "18.1.0",
