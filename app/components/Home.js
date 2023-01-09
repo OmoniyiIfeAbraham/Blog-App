@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Alert, FlatList, Text, View } from "react-native";
 import { getFeaturedPosts, getLatestPosts, getSinglePost } from "../api/Post";
 import PostListItems from "./PostListItems";
 import Seperator from "./Seperator";
@@ -45,13 +45,22 @@ export default function Home({ navigation }) {
   useEffect(() => {
     fetchFeaturedPosts();
     fetchLatestPosts();
+
+    return () => {
+      pageNo = 0;
+      setReachedToEnd(false);
+    };
   }, []);
 
-  const ListHeaderComponent = () => {
+  const ListHeaderComponent = useCallback(() => {
     return (
       <View style={{ paddingTop: Constants.statusBarHeight }}>
         {featuredPosts.length ? (
-          <Slider data={featuredPosts} title="Featured Posts" />
+          <Slider
+            onSlidePress={fetchSinglePost}
+            data={featuredPosts}
+            title="Featured Posts"
+          />
         ) : null}
         <View style={{ marginTop: 15 }}>
           <Seperator />
@@ -68,9 +77,10 @@ export default function Home({ navigation }) {
         </View>
       </View>
     );
-  };
+  }, [featuredPosts]);
 
-  const fetchSinglePost = async (slug) => {
+  const fetchSinglePost = async (postInfo) => {
+    const slug = postInfo.slug || postInfo;
     const { error, post } = await getSinglePost(slug);
 
     if (error) console.log(error);
@@ -97,7 +107,7 @@ export default function Home({ navigation }) {
       ListHeaderComponent={ListHeaderComponent}
       ItemSeparatorComponent={ItemSeparatorComponent}
       renderItem={renderItem}
-      onEndReached={async () => await fetchMorePosts()}
+      onEndReached={fetchMorePosts}
       onEndReachedThreshold={0}
       ListFooterComponent={() => {
         return reachedToEnd ? (

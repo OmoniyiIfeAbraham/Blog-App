@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -12,7 +13,7 @@ const width = Dimensions.get("window").width - 20;
 let currentSlideIndex = 0;
 let intervalId = 0;
 
-export default function Slider({ data, title }) {
+export default function Slider({ data, title, onSlidePress }) {
   const [dataToRender, setDataToRender] = useState([]);
   const [visibleSlideIndex, setVisibleSlideIndex] = useState(0);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -51,8 +52,12 @@ export default function Slider({ data, title }) {
 
   useEffect(() => {
     if (dataToRender.length && flatList.current) {
-    //   startSlider();
+      startSlider();
     }
+
+    return () => {
+      pauseSlider();
+    };
   }, [dataToRender.length]);
 
   useEffect(() => {
@@ -78,14 +83,16 @@ export default function Slider({ data, title }) {
 
   const renderItem = ({ item }) => {
     return (
-      <View>
-        <Image source={{ uri: item.thumbnail }} style={styles.imageStyle} />
-        <View style={{ width }}>
-          <Text numberOfLines={2} style={styles.textStyle}>
-            {item.title}
-          </Text>
+      <TouchableWithoutFeedback onPress={() => onSlidePress(item)}>
+        <View>
+          <Image source={{ uri: item.thumbnail }} style={styles.imageStyle} />
+          <View style={{ width }}>
+            <Text numberOfLines={2} style={styles.textStyle}>
+              {item.title}
+            </Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
