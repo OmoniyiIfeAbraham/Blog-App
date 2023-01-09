@@ -1,5 +1,5 @@
 import axios from "axios";
 
-const client = axios.create({ baseURL: "http://192.168.0.151:4848/api" });
+const client = axios.create({ baseURL: "https://blog-app-backend-api.up.railway.app/api" });
 
 export default client;
